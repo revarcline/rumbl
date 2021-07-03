@@ -50,7 +50,7 @@ defmodule Rumbl.Accounts do
         {:ok, user}
 
       user ->
-        {:error, unauthorized}
+        {:error, :unauthorized}
 
       true ->
         Pbkdf2.no_user_verify()

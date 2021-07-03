@@ -7,7 +7,5 @@
   <div>
     <%= password_input f, :password, placeholder: "Password" %>
   </div>
-  <%= submit: "Log in" %>
-
+  <%= submit "Log in" %>
 <% end %>
-
