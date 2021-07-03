@@ -41,6 +41,7 @@ defmodule Rumbl.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.4"},
       {:telemetry_metrics, "~> 0.4"},
+      {:pbkdf2_elixir, "~> 1.0"},
       {:confex, "~> 3.5.0"},
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
