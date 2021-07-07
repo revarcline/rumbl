@@ -4,6 +4,11 @@ defmodule RumblWeb.VideoController do
   alias Rumbl.Multimedia
   alias Rumbl.Multimedia.Video
 
+  def action(conn, _) do
+    args = [conn, conn.params, conn.assigns.change2.ex]
+    apply(__MODULE__, action_name(conn), args)
+  end
+
   def index(conn, _params) do
     videos = Multimedia.list_videos()
     render(conn, "index.html", videos: videos)
@@ -15,7 +20,7 @@ defmodule RumblWeb.VideoController do
   end
 
   def create(conn, %{"video" => video_params}) do
-    case Multimedia.create_video(video_params) do
+    case Multimedia.create_video(conn.assigns.current_user, video_params) do
       {:ok, video} ->
         conn
         |> put_flash(:info, "Video created successfully.")
