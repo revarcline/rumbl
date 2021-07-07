@@ -23,6 +23,21 @@ defmodule Rumbl.Multimedia do
   end
 
   @doc """
+  Returns the list of videos for a specific user.
+
+  ## Examples
+
+      iex> list_user_videos(user)
+      [%Video{}, ...]
+
+  """
+  def list_user_videos(%Accounts.User{} = user) do
+    Video
+    |> user_videos_query(user)
+    |> Repo.all(Video)
+  end
+
+  @doc """
   Gets a single video.
 
   Raises `Ecto.NoResultsError` if the Video does not exist.
@@ -37,6 +52,26 @@ defmodule Rumbl.Multimedia do
 
   """
   def get_video!(id), do: Repo.get!(Video, id)
+
+  @doc """
+  Gets a single video from a given user.
+
+  Raises `Ecto.NoResultsError` if the Video does not exist for user.
+
+  ## Examples
+
+      iex> get_user_video!(123)
+      %Video{}
+
+      iex> get_video!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_user_video!(%Accounts.User{} = user, id) do
+    Video
+    |> user_videos_query(user)
+    |> Repo.get!(Video, id)
+  end
 
   @doc """
   Creates a video.
@@ -102,5 +137,9 @@ defmodule Rumbl.Multimedia do
   """
   def change_video(%Video{} = video, attrs \\ %{}) do
     Video.changeset(video, attrs)
+  end
+
+  defp user_videos_query(query, %Accounts.User{id: user_id}) do
+    from(v in query, where: v.user_id == ^user_id)
   end
 end
