@@ -7,6 +7,7 @@ defmodule Rumbl.Multimedia do
   alias Rumbl.Repo
 
   alias Rumbl.Multimedia.Video
+  alias Rumbl.Multimedia.Category
   alias Rumbl.Accounts
 
   @doc """
@@ -60,10 +61,10 @@ defmodule Rumbl.Multimedia do
 
   ## Examples
 
-      iex> get_user_video!(123)
+      iex> get_user_video!(user, 123)
       %Video{}
 
-      iex> get_video!(456)
+      iex> get_video!(user, 456)
       ** (Ecto.NoResultsError)
 
   """
@@ -78,10 +79,10 @@ defmodule Rumbl.Multimedia do
 
   ## Examples
 
-      iex> create_video(%{field: value})
+      iex> create_video(user, %{field: value})
       {:ok, %Video{}}
 
-      iex> create_video(%{field: bad_value})
+      iex> create_video(user, %{field: bad_value})
       {:error, %Ecto.Changeset{}}
 
   """
@@ -137,6 +138,22 @@ defmodule Rumbl.Multimedia do
   """
   def change_video(%Video{} = video, attrs \\ %{}) do
     Video.changeset(video, attrs)
+  end
+
+  @doc """
+  Creates a category. Non-unique queries will return nil id.
+
+  ## Examples
+
+      iex> create_category(name)
+      %Rumbl.Multimedia.Category{}
+
+      iex> create_category(taken_name)
+      %Rumbl.Multimedia.Category{id: nil}
+
+  """
+  def create_category!(name) do
+    Repo.insert!(%Category{name: name}, on_conflict: :nothing)
   end
 
   defp user_videos_query(query, %Accounts.User{id: user_id}) do
