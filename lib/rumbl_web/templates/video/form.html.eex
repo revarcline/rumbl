@@ -15,7 +15,7 @@
 
   <%= label f, :cagetory_id, "Category" %>
   <%= select f, :category_id, category_select_options(@categories),
-      prompt: "Choose a cagetory:" %>
+      prompt: "Choose a category:" %>
 
   <%= label f, :description %>
   <%= textarea f, :description %>
