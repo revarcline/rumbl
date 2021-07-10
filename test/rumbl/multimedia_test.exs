@@ -50,8 +50,7 @@ defmodule Rumbl.MultimediaTest do
     test "create_video/2 with invalid data returns error changeset" do
       owner = user_fixture()
 
-      assert {:error, %Ecto.Changeset{}} =
-               Multimedia.update_video(video, %{title: "updated title"})
+      assert {:error, %Ecto.Changeset{}} = Multimedia.create_video(owner, @invalid_attrs)
     end
 
     test "update_video/2 with valid data updates the video" do
