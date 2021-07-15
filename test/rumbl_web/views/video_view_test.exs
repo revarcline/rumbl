@@ -22,4 +22,21 @@ defmodule RumblWeb.VideoViewTest do
       assert String.contains?(content, video.title)
     end
   end
+
+  test "renders new.html", %{conn: conn} do
+    owner = %Rumbl.Accounts.User{}
+    changeset = Rumbl.Multimedia.change_video(%Rumbl.Multimedia.Video{})
+    categories = [%Rumbl.Multimedia.Category{id: 123, name: "cats"}]
+
+    content =
+      render_to_string(
+        RumblWeb.VideoView,
+        "new.html",
+        conn: conn,
+        changeset: changeset,
+        categories: categories
+      )
+
+    assert String.contains?(content, "New Video")
+  end
 end
