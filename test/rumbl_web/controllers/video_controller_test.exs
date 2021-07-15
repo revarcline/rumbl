@@ -27,6 +27,27 @@ defmodule RumblWeb.VideoControllerTest do
       assert response =~ user_video.title
       refute response =~ other_video.title
     end
+
+    @tag login_as: "max"
+    test "creates user video and redirects", %{conn: conn, user: user} do
+      create_conn = post conn, Routes.video_path(conn, :create), video: @create_attrs
+
+      assert %{id: id} = redirected_params(create_conn)
+      assert redirected_to(create_conn) == Routes.video_path(create_conn, :show, id)
+
+      conn = get(conn, Routes.video_path(conn, :show, id))
+      assert html_response(conn, 200) =~ "Show Video"
+
+      assert Multimedia.get_video!(id).user_id == user.id
+    end
+
+    @tag login_as: "max"
+    test "does not create video and renders errors when invalid", %{conn: conn} do
+      count_before = video_count()
+      conn = post conn, Routes.video_path(conn, :create), video: @invalid_attrs
+      assert html_response(conn, 200) =~ "check the errors"
+      assert video_count() == count_before
+    end
   end
 
   test "requires user authentication on all actions", %{conn: conn} do
