@@ -41,6 +41,9 @@ defmodule RumblWeb.AuthTest do
       |> put_session(:user_id, 123)
       |> Auth.logout()
       |> send_resp(:ok, "")
+
+    next_conn = get(logout_conn, "/")
+    refute get_session(next_conn, :user_id)
   end
 
   test "call plases user from session into assigns", %{conn: conn} do
