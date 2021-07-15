@@ -1,6 +1,13 @@
 defmodule RumblWeb.VideoControllerTest do
   use RumblWeb.ConnCase, async: true
 
+  alias Rumbl.Multimedia
+
+  @create_attrs %{url: "http://youtu.be", title: "vid", description: "a vid"}
+  @invalid_attrs %{title: "invalid"}
+
+  defp video_count, do: Enum.count(Multimedia.list_videos())
+
   describe "with a logged-in user" do
     setup %{conn: conn, login_as: username} do
       user = user_fixture(username: username)
@@ -9,19 +16,16 @@ defmodule RumblWeb.VideoControllerTest do
       {:ok, conn: conn, user: user}
     end
 
+    @tag login_as: "max"
     test "lists all user's videos on index", %{conn: conn, user: user} do
       user_video = video_fixture(user, title: "funny cats")
-
-      other_video =
-        video_fixture(
-          user_fixture(username: "other"),
-          title: "another video"
-        )
+      other_video = video_fixture(user_fixture(username: "other"), title: "another video")
 
       conn = get(conn, Routes.video_path(conn, :index))
-      assert html_response(conn, 200) =~ ~r/Listing Videos/
-      assert String.contains?(conn.resp_body, user_video.title)
-      refute String.contains?(conn.resp_body, other_video.title)
+      response = html_response(conn, 200)
+      assert response =~ ~r/Listing Videos/
+      assert response =~ user_video.title
+      refute response =~ other_video.title
     end
   end
 
