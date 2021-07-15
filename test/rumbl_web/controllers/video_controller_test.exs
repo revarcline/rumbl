@@ -1,6 +1,13 @@
 defmodule RumblWeb.VideoControllerTest do
   use RumblWeb.ConnCase, async: true
 
+  setup %{conn: conn, login_as: username} do
+    user = user_fixture(username: username)
+    conn = assign(conn, :current_user, user)
+
+    {:ok, conn: conn, user: user}
+  end
+
   test "requires user authentication on all actions", %{conn: conn} do
     Enum.each(
       [
