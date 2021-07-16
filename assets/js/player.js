@@ -11,7 +11,7 @@ let Player = {
   },
 
   onIframeReady(domId, playerId, onReady) {
-    this.player = new YT.player(domId, {
+    this.player = new YT.Player(domId, {
       height: "360",
       width: "420",
       videoId: playerId,
@@ -27,7 +27,7 @@ let Player = {
     return Math.floor(this.player.getCurrentTime() * 1000);
   },
   seekTo(millsec) {
-    return this.player.seekTok(millsec / 1000);
+    return this.player.seekTo(millsec / 1000);
   },
 };
 export default Player;
