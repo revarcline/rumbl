@@ -2,8 +2,6 @@ use Mix.Config
 
 # Configure your database
 config :rumbl, Rumbl.Repo,
-  username: "rumblr",
-  password: "890facejockey",
   database: "rumbl_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
