@@ -26,11 +26,10 @@ const Video = {
     const presence = new Presence(vidChannel);
 
     presence.onSync(() => {
-      console.log("presence synced");
       userList.innerHTML = presence
-        .list((id, { metas: [first, ...rest] }) => {
+        .list((id, { user: user, metas: [first, ...rest] }) => {
           let count = rest.length + 1;
-          return `<li>${id}: (${count})</li>`;
+          return `<li>${user.username}: (${count})</li>`;
         })
         .join("");
     });
