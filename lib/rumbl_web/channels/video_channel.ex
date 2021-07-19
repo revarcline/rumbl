@@ -2,6 +2,7 @@ defmodule RumblWeb.VideoChannel do
   use RumblWeb, :channel
   alias Rumbl.Accounts
   alias Rumbl.Multimedia
+  alias RumblWeb.AnnotationView
 
   def join("videos:" <> video_id, _params, socket) do
     video_id = String.to_integer(video_id)

@@ -1,4 +1,4 @@
-defmodule RumbleWeb.AnnotationView do
+defmodule RumblWeb.AnnotationView do
   use RumblWeb, :view
 
   def render("annotation.json", %{annotation: annotation}) do
