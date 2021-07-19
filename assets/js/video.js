@@ -1,4 +1,5 @@
 import Player from "./player";
+import { Presence } from "phoenix";
 
 const Video = {
   init(socket, element) {
@@ -17,9 +18,21 @@ const Video = {
     const msgContainer = document.getElementById("msg-container");
     const msgInput = document.getElementById("msg-input");
     const postButton = document.getElementById("msg-submit");
+    const userList = document.getElementById("user-list");
     let lastSeenId = 0;
     const vidChannel = socket.channel(`videos:${videoId}`, () => {
       return { last_seen_id: lastSeenId };
+    });
+    const presence = new Presence(vidChannel);
+
+    presence.onSync(() => {
+      console.log("presence synced");
+      userList.innerHTML = presence
+        .list((id, { metas: [first, ...rest] }) => {
+          let count = rest.length + 1;
+          return `<li>${id}: (${count})</li>`;
+        })
+        .join("");
     });
 
     postButton.addEventListener("click", (e) => {
