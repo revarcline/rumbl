@@ -20,11 +20,24 @@ const Video = {
     const vidChannel = socket.channel(`videos:${videoId}`);
 
     postButton.addEventListener("click", (e) => {
+      e.preventDefault();
       const payload = { body: msgInput.value, at: Player.getCurrentTime() };
       vidChannel
         .push("new_annotation", payload)
         .receive("error", (e) => console.log(e));
       msgInput.value = "";
+    });
+
+    msgContainer.addEventListener("click", (e) => {
+      e.preventDefault();
+      const seconds =
+        e.target.getAttribute("data-seek") ||
+        e.target.parentNode.getAttribute("data-seek");
+      if (!seconds) {
+        return;
+      }
+
+      Player.seekTo(seconds);
     });
 
     vidChannel.on("new_annotation", (resp) => {
