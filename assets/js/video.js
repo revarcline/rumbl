@@ -17,11 +17,18 @@ const Video = {
     const msgContainer = document.getElementById("msg-container");
     const msgInput = document.getElementById("msg-input");
     const postButton = document.getElementById("msg-submit");
-    const vidChannel = socket.channel(`videos:${videoId}`);
+    let lastSeenId = 0;
+    const vidChannel = socket.channel(`videos:${videoId}`, () => {
+      return { last_seen_id: lastSeenId };
+    });
 
     postButton.addEventListener("click", (e) => {
       e.preventDefault();
       const payload = { body: msgInput.value, at: Player.getCurrentTime() };
+      vidChannel.on("new_annotation", (resp) => {
+        lastSeenId = resp.id;
+        this.renderAnnotation(msgContainer, resp);
+      });
       vidChannel
         .push("new_annotation", payload)
         .receive("error", (e) => console.log(e));
